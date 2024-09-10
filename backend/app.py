@@ -48,20 +48,17 @@ def register():
     return render_template('register.html')
 
 # Route of Login 
-@app.route('/login', methods=['POST','GET'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
+    username = request.form['username']
+    password = request.form['password']
+    user = User.query.filter_by(username=username).first()
 
-        if user and check_password_hash(user.password, password):
-            login_user(user)
-            flash('Inicio de sesion exitoso')
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Usuario o contraseña incorrectos')
-    return render_template('login.html')
+    if user and check_password_hash(user.password, password):
+        login_user(user)
+        return 'Login successful', 200  # Respuesta para PyQt5
+    else:
+        return 'Invalid credentials', 401  # Respuesta de error para PyQt5
 
 # Route of Dashboard bloqued 
 @app.route('/dashboard')
